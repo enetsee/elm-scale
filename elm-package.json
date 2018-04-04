@@ -1,0 +1,30 @@
+{
+    "version": "1.0.0",
+    "summary": "A library for constructing and applying scales. ",
+    "repository": "https://github.com/enetsee/elm-scale.git",
+    "license": "BSD3",
+    "source-directories": [
+        "src"
+    ],
+    "exposed-modules": [
+        "Scale.Config",
+        "Scale.Continuous",
+        "Scale.Continuous.Linear",
+        "Scale.Continuous.Log",
+        "Scale.Continuous.Power",
+        "Scale.Ordinal",
+        "Scale.Ordinal.Band",
+        "Scale.Ordinal.Comparable",
+        "Scale.Ordinal.Custom",
+        "Scale.Sequential",
+        "Scale.Sequential.HSL",
+        "Scale.Sequential.RGB",
+        "Scale.Sequential.RGBBasis"
+    ],
+    "dependencies": {
+        "elm-lang/core": "5.1.1 <= v < 6.0.0",
+        "elm-lang/html": "2.0.0 <= v < 3.0.0",
+        "enetsee/elm-color-interpolate": "1.0.0 <= v < 2.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+}
