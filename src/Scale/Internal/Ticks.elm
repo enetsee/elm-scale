@@ -8,24 +8,26 @@ module Scale.Internal.Ticks exposing (ticks, tickStep, tickIncrement)
 ticks : ( Float, Float ) -> Int -> List Float
 ticks ( start, stop ) count =
     let
-        ( reverse, start2, stop2 ) =
+        ( reverse, startVal, stopVal ) =
             if stop < start then
                 ( List.reverse, stop, start )
             else
                 ( identity, start, stop )
 
         step =
-            tickIncrement ( start2, stop2 ) count
+            tickIncrement ( startVal, stopVal ) count
     in
-        if step == 0.0 || isInfinite step then
+        if startVal == stopVal && count > 0 then
+            [ startVal ]
+        else if step == 0.0 || isInfinite step then
             []
         else if step > 0.0 then
             let
                 newStart =
-                    ceiling (start2 / stop2)
+                    ceiling (startVal / step)
 
                 newStop =
-                    floor (stop2 / step)
+                    floor (stopVal / step)
 
                 n =
                     newStop - newStart + 1
@@ -36,10 +38,10 @@ ticks ( start, stop ) count =
         else
             let
                 newStart =
-                    floor (start2 * step)
+                    floor (startVal * step)
 
                 newStop =
-                    ceiling (stop2 * step)
+                    ceiling (stopVal * step)
 
                 n =
                     newStart - newStop + 1
@@ -55,14 +57,17 @@ tickStep ( start, stop ) count =
         n =
             toFloat count
 
-        step =
-            (stop - start) / max 0 n
+        delta =
+            abs <| stop - start
 
-        power =
-            toFloat <| floor <| log10 step
+        step0 =
+            delta / (max 0.0 n)
+
+        step1 =
+            10.0 ^ (log10 step0)
 
         error =
-            step / (10 ^ power)
+            step0 / step1
 
         f =
             if stop < start then
@@ -71,13 +76,13 @@ tickStep ( start, stop ) count =
                 identity
     in
         if error >= e10 then
-            f <| step * 10
+            f <| step1 * 10
         else if error >= e5 then
-            f <| step * 5
+            f <| step1 * 5
         else if error >= e2 then
-            f <| step * 2
+            f <| step1 * 2
         else
-            f step
+            f step1
 
 
 tickIncrement : ( Float, Float ) -> Int -> Float
