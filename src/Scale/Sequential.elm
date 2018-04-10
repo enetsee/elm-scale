@@ -47,8 +47,8 @@ sequential { domain, compareDomain, deinterpolateDomain, interpolator, outsideDo
 
 {-| -}
 ticks : Sequential domain range -> Int -> List domain
-ticks (Sequential { domain, ticks }) =
-    ticks domain
+ticks (Sequential s) n =
+    s.ticks s.domain n
 
 
 {-| -}
