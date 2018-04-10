@@ -50,4 +50,4 @@ deinterpolateLinear ( lower, upper ) =
         if delta == 0.0 then
             always 0.0
         else
-            \x -> (x - lower) / upper
+            \x -> (x - lower) / delta
