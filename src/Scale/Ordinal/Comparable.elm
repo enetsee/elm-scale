@@ -26,7 +26,8 @@ comparable { domain, range } =
         ordinal { domain = domain, mapping = \d -> Dict.get d dict }
 
 
-{-| Zip lists cycling through the elements of the shorter of the two lists
+{-| Zip lists cycling through the elements of the second of the two lists if
+    it is shorter than the first
 -}
 zipCycle : List a -> List b -> List ( a, b )
 zipCycle xs ys =
@@ -56,8 +57,5 @@ zipCycleHelper xs ys accu cx cy =
         ( _ :: _, _ ) ->
             zipCycleHelper xs ys accu cx ys
 
-        ( _, _ :: _ ) ->
-            zipCycleHelper xs ys accu xs cy
-
         _ ->
-            List.reverse accu
+            accu

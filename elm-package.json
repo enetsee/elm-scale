@@ -1,5 +1,5 @@
 {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "summary": "A library for constructing and applying scales. ",
     "repository": "https://github.com/enetsee/elm-scale.git",
     "license": "BSD3",
