@@ -7,6 +7,7 @@ module Scale.Continuous.Log exposing (Log, log, niceDomain)
 import Scale.Config exposing (OutsideDomain(Clamp))
 import Scale.Continuous exposing (continuous, Continuous)
 import Scale.Internal.Reinterpolate exposing (reinterpolateLinear)
+import Scale.Internal.Ticks as Ticks
 
 
 {-| -}
@@ -27,8 +28,8 @@ log { base, domain, range, outsideDomain } =
         , range = range
         , compareDomain = compare
         , deinterpolateDomain = deinterpolateLog base
-        , interpolateRange = reinterpolateLog
-        , reinterpolateDomain = reinterpolateLinear
+        , interpolateRange = reinterpolateLinear
+        , reinterpolateDomain = reinterpolateLog
         , outsideDomain = outsideDomain
         , ticks = ticks base
         }
@@ -43,15 +44,15 @@ deinterpolateLog base ( lower, upper ) =
         if delta /= 0.0 then
             \x -> logBase base (x / lower) / delta
         else
-            always 0.0
+            always delta
 
 
 reinterpolateLog : ( Float, Float ) -> Float -> Float
 reinterpolateLog ( lower, upper ) =
     if lower < 0.0 then
-        \t -> -(-upper ^ t) * (-lower ^ (1.0 - t))
+        \t -> -(-upper ^ t * -lower ^ (1.0 - t))
     else
-        \t -> (upper ^ t) * (lower ^ (1.0 - t))
+        \t -> (upper ^ t * lower ^ (1.0 - t))
 
 
 
@@ -121,20 +122,9 @@ ticks base domain count =
             else
                 ticksHelper (\k -> k - 1) (\k -> k >= 1) (toFloat (round i - 1)) (toFloat (round j + 1)) (base - 1)
         else
-            let
-                count =
-                    round (min (j - i) n)
-
-                step =
-                    tickStep i j count
-
-                beg =
-                    toFloat (ceiling (i / step)) * step
-
-                end =
-                    toFloat (floor (j / step)) * step + step / 2
-            in
-                List.map (\a -> a ^ base) <| range beg end step
+            round (min (j - i) n)
+                |> Ticks.ticks ( i, j )
+                |> List.map (\a -> base ^ a)
 
 
 tickStep : Float -> Float -> Int -> Float

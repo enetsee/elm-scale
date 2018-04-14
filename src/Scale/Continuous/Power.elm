@@ -29,8 +29,8 @@ power { exponent, domain, range, outsideDomain } =
         , range = range
         , compareDomain = compare
         , deinterpolateDomain = deinterpolatePower exponent
-        , interpolateRange = reinterpolatePower exponent
-        , reinterpolateDomain = reinterpolateLinear
+        , interpolateRange = reinterpolateLinear
+        , reinterpolateDomain = reinterpolatePower exponent
         , outsideDomain = outsideDomain
         , ticks = Ticks.ticks
         }
